@@ -1,0 +1,136 @@
+CADASTRO (no PyCharm) 
+
+<!-- 
+Vale lembrar que a rota que usamos para fazer cadastro é POST (Lembra a palavra postar, “postar” uma nova pessoa).  
+
+Temos outras rotas que envolvem o cadastro, mas elas têm funções diferentes, por exemplo: 
+
+PUT: editar as informações do cadastro 
+
+GET: “pegar” e exibir os cadastros existentes (é usada, por exemplo, na lista) 
+
+-->
+
+@app.route('/cadastro', methods=['POST'])  
+
+<!-- # Recebe os dados enviados no corpo da requisição em formato JSON data = request.get_json()  -->
+def cadastro_post(): 
+
+<!-- # Extrai os dados do JSON recebido  -->
+nome = data.get('nome') 
+e_mail = data.get('e_mail') 
+senha = data.get('senha') 
+cnpj = data.get('cnpj') 
+categoria = data.get('categoria') 
+descricao_da_causa = data.get('descricao_da_causa') 
+cep = data.get('cep') 
+chave_pix = data.get('chave_pix') 
+num_agencia = data.get('num_agencia') 
+num_conta = data.get('num_conta') 
+nome_banco = data.get('nome_banco') 
+endereco = data.get('endereco') 
+complemento = data.get('complemento') 
+nome_resp = data.get('nome_resp') 
+telefone = data.get('telefone') 
+site_url = data.get('site_url') 
+facebook = data.get('facebook') 
+instagram = data.get('instagram') 
+cidade = data.get('cidade') 
+<!-- # Converte o tipo para inteiro  -->
+tipo_usuario = int(data.get('tipo'))
+ 
+<!-- # Se a senha não estiver dentro dos padrões de validação  -->
+if not validar_senha(senha): 
+ 
+<!-- # Mostra o erro e pede para que ela seja colocada dentro do padrões -->
+return jsonify({"error": 'A sua senha precisa ter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial.'}), 401 
+ 
+<!-- # Cria um cursor para executar comandos SQL no banco de dados  -->
+cursor = con.cursor() 
+ 
+<!-- # Verifica se o e-mail já existe na tabela USUARIO  -->
+cursor.execute("SELECT 1 FROM usuario WHERE E_MAIL = ?", (e_mail,)) 
+<!-- # Se encontrar um resultado, fala que o e-mail já está cadastrado  -->
+if cursor.fetchone():  
+    return jsonify({"error": "E-mail já cadastrado!"}), 400 
+ 
+<!-- # Gera o hash da senha para segurança (evita armazenar senhas em texto puro)  -->
+senha = generate_password_hash(senha).decode('utf-8') 
+ 
+<!-- # Se o tipo do usuário for 3 (doador)  -->
+if tipo_usuario == 3: 
+    <!-- # Insere o nome, o e-mail, o tipo e o ativo  -->
+    cursor.execute("INSERT INTO USUARIO(NOME, E_MAIL, SENHA, tipo, ativo) VALUES (?, ?, ?, ?, ?)", 
+                   (nome, e_mail, senha, 3, 1)) 
+    con.commit() 
+    cursor.close() 
+    <!-- # Retorna a mensagem em JSON -->
+    return jsonify({ 
+        'message': "Registro realizado com sucesso!", 
+        'usuario': { 
+            'nome': nome, 
+            'e_mail': e_mail, 
+            'senha': senha 
+        } 
+    }) 
+ 
+<!-- # Se o tipo do usuário for 2 (ONG)  -->
+elif tipo_usuario == 2: 
+    <!-- # Insere todas essas informações -->
+    cursor.execute("INSERT INTO USUARIO(NOME, E_MAIL, SENHA, CNPJ, CATEGORIA, DESCRICAO_DA_CAUSA, CEP, CHAVE_PIX, NUM_AGENCIA, NUM_CONTA, NOME_BANCO, ATIVO, TIPO, ENDERECO, COMPLEMENTO, NOME_RESP, TELEFONE, SITE_URL, FACEBOOK, INSTAGRAM, CIDADE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                   (nome, e_mail, senha, cnpj, categoria, descricao_da_causa, cep, chave_pix, num_agencia, num_conta, nome_banco, 1, 2, endereco, complemento, nome_resp, telefone, site_url, facebook, instagram, cidade)) 
+    con.commit() 
+    <!-- # Fecha o cursor -->
+    cursor.close() 
+    <!-- # Retorna a mensagem em JSON -->
+    return jsonify({ 
+        'message': "Registro realizado com sucesso!", 
+        'usuario': { 
+            'nome': nome, 
+            'e_mail': e_mail, 
+            'senha': senha, 
+            'cnpj': cnpj, 
+            'categoria': categoria, 
+            'descricao_da_causa': descricao_da_causa, 
+            'cep': cep, 
+            'chave_pix': chave_pix, 
+            'num_agencia': num_agencia, 
+            'num_conta': num_conta, 
+            'nome_banco': nome_banco, 
+            'endereco': endereco, 
+            'complemento': complemento, 
+            'nome_resp': nome_resp, 
+            'telefone': telefone, 
+            'site_url': site_url, 
+            'facebook': facebook, 
+            'instagram': instagram, 
+            'cidade': cidade 
+        } 
+    }) 
+ 
+<!-- # Se o tipo do usuário for 1 (administrador)  -->
+elif tipo_usuario == 1: 
+    <!-- # Insere o nome, o e-mail, o tipo e o ativo, mas nós só inserimos admins pelo banco  -->
+    cursor.execute("INSERT INTO USUARIO(NOME, E_MAIL, SENHA, tipo, ativo) VALUES (?, ?, ?, ?, ?)", 
+                   (nome, e_mail, senha, 1, 1)) 
+    con.commit() 
+    <!-- # Fecha o cursor -->
+    cursor.close()
+    <!-- # Retorna a mensagem em JSON -->
+    return jsonify({ 
+        'message': "Registro realizado com sucesso!", 
+        'usuario': { 
+            'nome': nome, 
+            'e_mail': e_mail, 
+            'senha': senha 
+        } 
+    }) 
+ 
+<!-- # Se o tipo informado for diferente de 1, 2 ou 3  -->
+else: 
+    <!-- # Retorna que ele é inválido -->
+    return jsonify({ 
+        'error': "Tipo Selecionado Inválido!" 
+    }), 400 
+ 
+ 

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<head>
+    <!-- Define o conjunto de caracteres usado -->
+    <meta charset="UTF-8">
+    <!-- Deixa a página responsiva em dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Link do seu CSS personalizado -->
+    <link rel="stylesheet" href="assets/css/cadastro.css">
+
+    <!-- Link do Bootstrap, que ajuda a deixar o layout mais bonito e responsivo -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Importa fontes do Google Fonts (nesse caso, a Poppins) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Título que aparece na aba do navegador -->
+    <title>Doe Aí - Cadastro</title>
+
+    <!-- Importa jQuery (para facilitar manipulações com JavaScript) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Importa biblioteca de alertas bonitos (SweetAlert2) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Script externo onde fica a variável `ipPython` com o endereço da API -->
+    <script src="api.js"></script>
+</head>
+
+<body>
+    <!-- Cabeçalho do site com logo, barra de busca e link para a página inicial -->
+    <header class="d-flex pt-3 align-items-center justify-content-center">
+        <img class="logo1" src="assets/img/logo.png" alt="Logo da fundação 'Doe Aí'.">
+
+        <!-- Campo de busca por ONGs -->
+        <div class="group">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="search-icon">...</svg>
+            <input id="query" class="input" type="search" placeholder="Busque por ONGs..." name="searchbar"/>
+        </div>
+
+        <nav>
+            <div>
+                <a href="landing-page.html" class="text-nav">PÁGINA INICIAL</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main>
+        <div class="container">
+            <div class="row">
+
+                <!-- Coluna esquerda com formulário básico -->
+                <div class="col-sm-6 centralizar-conteudo">
+                    <h1>Olá! Faça seu <br> cadastro aqui!</h1>
+
+                    <!-- Início do formulário -->
+                    <form action="" id="formCadastroUsuario">
+
+                        <!-- Seleciona o tipo de usuário (ONG ou Doador) -->
+                        <select name="tipo" id="tipo" class="select">
+                            <!-- A qui o 'disabled' desabilita o "Selecione seu tipo" como uma opção, deixando apenas as opções "ONG" e "doador" -->
+                            <option selected disabled>Selecione seu tipo</option>
+                            <option value="3">Doador</option>
+                            <option value="2">ONG</option>
+                        </select>
+
+                        <!-- Campos comuns a qualquer tipo de usuário (adm, ONG e doador) -->
+                        <div class="div-branca">
+                            <input type="text" placeholder="Nome" name="nome">
+                            <input type="email" placeholder="E-mail" name="e_mail">
+                            <p class="mensagem-condicao">*O e-mail deve ser um não cadastrado.</p>
+
+                            <!-- Campo de senha com botão para mostrar/ocultar -->
+                            <div class="input-container">
+                                <input type="password" placeholder="Senha" name="senha" id="senha" class="marg">
+                                <!-- O togglePassword() é a função que oculta e exibe a senha quando o ícone (olhinho) é clicado -->
+                                <img id="eye-icon" class="eye-icon" src="assets/img/olholaranja.png" alt="Mostrar/Ocultar Senha" onclick="togglePassword()">
+                                <p class="mensagem-condicao">*A sua senha precisa ter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial.</p>
+                            </div>
+                        </div>
+                </div>
+
+                <!-- Caso o tipo seja 2 (ONG), a coluna direita aparece, os campos abaixo sósão necessários para aONG -->
+                <div class="col-sm-6">
+                    <div class="div-branca div-branca2" id="cadastro" style="">
+                        <input type="number" placeholder="CNPJ" name="cnpj">
+                        <input type="text" placeholder="Categoria" name="categoria">
+                        <input type="text" placeholder="Descrição da causa" name="descricao_da_causa">
+
+                        <div class="input-group">
+                            <input type="number" class="arredondar" placeholder="CEP" name="cep">
+                            <input type="number" class="arredondar" placeholder="Chave pix" name="chave_pix">
+                        </div>
+
+                        <div class="input-group">
+                            <input type="number" class="arredondar" placeholder="N° da agência" name="num_agencia">
+                            <input type="number" class="arredondar" placeholder="N° da conta" name="num_conta">
+                        </div>
+
+                        <input type="text" placeholder="Nome do banco" name="nome_banco">
+                    </div>
+
+                    <!-- Botão para enviar o formulário -->
+                    <button type="submit" class="botao-direita">ENVIAR</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé com informações de contato e redes sociais -->
+    <footer>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img class="logo2 tam" src="assets/img/logo.png" alt="Logo da fundação 'Doe Aí'.">
+                </div>
+
+                <div class="col-md-2 text-center margin">
+                    <h5>TELEFONE</h5>
+                    <h6>(18) 99120-3762</h6>
+                </div>
+
+                <div class="col-md-2 text-center margin">
+                    <h5>SOBRE NÓS</h5>
+                    <h6>• ONGs</h6>
+                    <h6>• Doações</h6>
+                </div>
+
+                <div class="col-md-5 text-center">
+                    <h5>NOS ACOMPANHE</h5>
+                    <div class="space">
+                        <!-- Links para redes sociais -->
+                        <a href="https://www.facebook.com" target="_blank"><img src="assets/img/facebook.png"></a>
+                        <a href="https://www.instagram.com" target="_blank"><img src="assets/img/instagram.png"></a>
+                        <a href="https://www.youtube.com" target="_blank"><img src="assets/img/youtube.png"></a>
+                        <a href="https://www.tiktok.com" target="_blank"><img src="assets/img/tik tok.png"></a>
+                    </div>
+                </div>
+
+                <!-- Créditos finais -->
+                <div class="col-md-12 azul text-center">
+                    <h5>© 2025. Todos os direitos reservados.</h5>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+<!-- Scripts JavaScript -->
+<script>
+    // Script que altera o placeholder do campo de busca quando o usuário clica
+    document.addEventListener("DOMContentLoaded", function() {
+        let input = document.querySelector("#query"); // pegando o selector pelo ID
+        if (input) {
+            input.addEventListener("focus", function () { // quando for focado, o placeholder muda
+                input.placeholder = "Busque por ONGs, vagas e endereços.";
+            });
+            input.addEventListener("focusout", function () {
+                input.placeholder = "Busque por ONGs...";
+            });
+        }
+    });
+
+    // Script que faz com que quando o usuário seleciona o tipo "Doador", esconde os campos da ONG
+    $("#tipo").on("change", function(){
+        var tipo = $("#tipo").val();
+        if(tipo == 3) {
+            $("#cadastro").css("opacity", 0) // Esconde os campos
+        } else {
+            $("#cadastro").css("opacity", 100) // Mostra os campos
+        }
+    })
+
+    // Quando o formulário é enviado
+    $("#formCadastroUsuario").on("submit", function(e){
+        e.preventDefault(); // Evita que a página recarregue
+
+        // Esse 'let' pega os dados do formulário
+        let dados = new FormData(this);
+
+        // Esse 'let' converte em objeto JavaScript
+        let envia = {
+            nome: dados.get("nome"),
+            e_mail: dados.get("e_mail"),
+            senha: dados.get("senha"),
+            cnpj: dados.get("cnpj"),
+            categoria: dados.get("categoria"),
+            descricao_da_causa: dados.get("descricao_da_causa"),
+            cep: dados.get("cep"),
+            chave_pix: dados.get("chave_pix"),
+            num_agencia: dados.get("num_agencia"),
+            num_conta: dados.get("num_conta"),
+            nome_banco: dados.get("nome_banco"),
+            tipo: dados.get("tipo")
+        }
+
+        // Essa variávelransforma esse objeto em JSON
+        envia = JSON.stringify(envia)
+
+        // Envia os dados via AJAX (AJAX é sempre uma requisição) para a API
+        $.ajax({
+            method: "POST",
+            url: ipPython + "/cadastro", // ATENÇÃO: é aqui que está sendo conectada a API com a página, o link é trazido da página JavaScript chamada 'api.js' e no final adicionamos a oparte do link quye corresponde especificamente a essa página
+            data: envia,
+            contentType: "application/json",
+            success: function(retorno){
+                Swal.fire({
+                    title: "Sucesso!",
+                    text: retorno.message,
+                    icon: "success"
+                }).then(function(){
+                    window.location.href = "login.html"; // Redireciona pro login 
+                })
+            },
+            error: function(retorno){
+                Swal.fire({
+                    title: "Opa...",
+                    text: retorno.responseJSON.error,
+                    icon: "error"
+                });
+            }
+        })
+    })
+
+    // Aqui está a função que é chamada acima e que mostra ou oculta a senha
+    function togglePassword() {
+        var senhaField = document.getElementById("senha"); // pegando a senha
+        var eyeIcon = document.getElementById("eye-icon"); // pegando o ícone do olhinho
+
+        if (senhaField.type === "password") {
+            senhaField.type = "text"; // Mostra a senha
+        } else {
+            senhaField.type = "password"; // Oculta a senha
+        }
+    }
+</script>
+</html>
