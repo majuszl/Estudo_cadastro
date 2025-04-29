@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<!-- Início do documento HTML com idioma em português e leitura da esquerda para a direita -->
+
+<head>
+    <!-- Configurações iniciais da página -->
+    <meta charset="UTF-8"> <!-- Suporte a caracteres acentuados -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividade para dispositivos móveis -->
+
+    <!-- Arquivo de estilo CSS personalizado -->
+    <link rel="stylesheet" href="assets/css/explorardoador.css">
+
+    <!-- Importação do Bootstrap para estilos prontos e responsividade -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Importação da fonte Poppins do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:...&display=swap" rel="stylesheet">
+
+    <!-- Importação do SweetAlert2 para exibir alertas bonitos -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Arquivo JS que provavelmente contém o endereço da API (ex: ipPython) -->
+    <script src="api.js"></script>
+
+    <title>Doe Aí - Explorar</title> <!-- Título da aba do navegador -->
+</head>
+
+<!-- jQuery: biblioteca JavaScript que facilita ações como AJAX e manipulação de DOM -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<body style="background-color: #e6e5e5;"> <!-- Cor de fundo da página -->
+
+    <!-- Cabeçalho da página com o logo e botão de perfil -->
+    <header class="d-flex pt-3 align-items-center justify-content-center">
+        <img class="logo1" src="assets/img/logo.png" alt="Logo da fundação 'Doe Aí'.">
+        <nav>
+            <div>
+                <a href="edicao-doador.html" class="text-nav3 btn-lar">PERFIL</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Validação do acesso com token (segurança de autenticação) -->
+    <script>
+        $(document).ready(function () {
+            let token = localStorage.getItem("token"); // Pega o token do usuário
+            let tipo = localStorage.getItem("tipo"); // Verifica o tipo (deve ser 3 para acessar essa página)
+
+            if (!token || tipo != 3) {
+                // Se não tiver token ou tipo inválido, exibe alerta e redireciona
+                Swal.fire({
+                    title: "Erro",
+                    text: "Você não pode acessar essa página!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    window.location.href = "login.html";
+                });
+            }
+        });
+
+        // Efeito de foco no campo de busca
+        document.addEventListener("DOMContentLoaded", function() {
+            let input = document.querySelector("#query");
+            if (input) {
+                input.addEventListener("focus", function () {
+                    input.placeholder = "Busque por ONGs, vagas e endereços.";
+                });
+
+                input.addEventListener("focusout", function () {
+                    input.placeholder = "Busque por ONGs...";
+                });
+            }
+        });
+    </script>
+
+    <main>
+        <!-- Título e banner de apresentação -->
+        <div class="oii">
+            <div class="tit">
+                <h1 class="titulo">Explorar</h1>
+                <h4 class="titulo2">Encontre projetos com o perfil desejado para ajudar!</h4>
+            </div>
+            <img class="banner" src="assets/img/doadorfundo2.png">
+
+            <!-- Área de busca com campo e botão -->
+            <div class="azulescuro">
+                <div class="col-md-4">
+                    <h4 class="branco">Que tal pesquisar por categoria? Existem diversas opções!</h4>
+                </div>
+                <div class="col-md-3 group2">
+                    <svg class="search-icon2"> <!-- Ícone de lupa -->
+                        <g>
+                            <path d="..."></path>
+                        </g>
+                    </svg>
+                    <input
+                        id="searchInput"
+                        class="input2"
+                        type="search"
+                        placeholder="Busque por ONGs..."
+                        name="searchbar"
+                    />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn-pesquisar">Pesquisar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área onde ONGs serão exibidas dinamicamente -->
+        <div class="cor-fund-cinz">
+            <h2 class="esp-left"></h2>
+            <div class="exibe_ongs" id="exibe_ongs"></div> <!-- ONGs aparecem aqui -->
+
+            <div class="no-products" style="display: none; text-align: center;">
+                <h5 class="noeh5">Nenhuma ONG encontrada.</h5>
+            </div>
+        </div>
+
+        <!-- ONGs em destaque fixas -->
+        <div class="laranja1">
+            <h2>Instituições para conhecer hoje</h2>
+        </div>
+        <div class="esp-in">
+            <div class="quatro">
+                <img class="img1" src="assets/img/ong1.png" alt="ONG Proteção Animal" />
+                <h4>Proteção Animal</h4>
+                <p>Cuidado, amor e resgate de animais</p>
+            </div>
+            <div class="quatro">
+                <img class="img2" src="assets/img/ong2.png" alt="ONG Sorriso Solidário" />
+                <h4>Sorriso Solidário</h4>
+                <p>Ajuda com tratamento odontológico</p>
+            </div>
+            <div class="quatro3">
+                <img class="img3" src="assets/img/ong3.png" alt="ONG Renascer Mulher" />
+                <h4>Renascer Mulher</h4>
+                <p>Auxilia mulheres</p>
+            </div>
+        </div>
+
+        <!-- Painel com frase de encerramento -->
+        <div class="painelfim">
+            <h1 class="frasefinal">“A doação é um ato solidário que preenche a alma e semeia a esperança!”</h1>
+            <img src="assets/img/doadorfundo.png" class="painelfimm" alt="fundo">
+        </div>
+    </main>
+
+    <!-- Rodapé da página -->
+    <footer>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img class="logo2 tam" src="assets/img/logo.png" alt="Logo da fundação 'Doe Aí'.">
+                </div>
+                <div class="col-md-2 col-12 text-center margin">
+                    <h5 class="pb-2 tam2">TELEFONE</h5>
+                    <h6 class="p-tt">(18) 99120-3762</h6>
+                </div>
+                <div class="col-md-2 col-12 text-center margin">
+                    <h5 class="pb-2 tam2">SOBRE NÓS</h5>
+                    <h6>• ONGs</h6>
+                    <h6 class="p-t">• Doações</h6>
+                </div>
+                <div class="col-md-5 text-center">
+                    <h5 class="pb-2 tam2">NOS ACOMPANHE</h5>
+                    <div class="space">
+                        <!-- Links para redes sociais -->
+                        <a href="https://www.facebook.com" target="_blank"><img class="imgfooter" src="assets/img/facebook.png"></a>
+                        <a href="https://www.instagram.com" target="_blank"><img class="imgfooter" src="assets/img/instagram.png"></a>
+                        <a href="https://www.youtube.com" target="_blank"><img class="imgfooter alt" src="assets/img/youtube.png"></a>
+                        <a href="https://www.tiktok.com" target="_blank"><img class="imgfooter" src="assets/img/tik tok.png"></a>
+                    </div>
+                </div>
+                <div class="col-md-12 azul text-center">
+                    <h5 class="tam3">© 2025. Todos os direitos reservados.</h5>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Importa o JS do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para carregar ONGs da API e montar HTML dinamicamente -->
+    <script>
+        $(document).ready(function(){
+            var settings = {
+                "url": ipPython + "/ongs", // Endereço da API
+                "method": "GET", // Método para pegar dados (GET é usado para obter informações)
+                "timeout": 0, // Sem limite de tempo para a requisição
+                "headers": {
+                    "Content-Type": "application/json" // Tipo de conteúdo da requisição
+                },
+                "success": function(retorno) {
+                    // Quando a requisição for bem-sucedida, o que fazer com os dados
+                    var ongs = retorno.usuarios; // Recebe a lista de ONGs
+
+                    // O método 'forEach' está sendo utilizado para iterar sobre a lista de ONGs (retornadas da uma API), para cada item da lista a função aqui dentro será executada.
+                    ongs.forEach((item) => {
+                        // Este comando pega o elemento HTML com o ID 'exibe_ongs' 
+                        // O '.innerHTML'Está adicionando (com +=) conteúdo HTML àquele elemento. Ou seja, a cada iteração, será criado mais um bloco HTML com as informações da ONG.
+                        document.getElementById("exibe_ongs").innerHTML += `
+
+                        // ### Dentro de cada iteração, um bloco HTML (estrutura de section, div, e outros elementos) é gerado e inserido.
+
+                        <section class="secao-ongs prod">
+                            <div class="container-ong">
+                                <div class="img-wrapper">
+
+                                    // ### Abaixo exibe uma imagem de fundo (talvez um fundo branco ou genérico) para a ONG.
+
+                                    <img src="assets/img/fundobranco2.png" class="img-fundo" alt="Fundo Branco">
+
+                                    // ### Essa imagem é dinâmica. O src (caminho da imagem) está usando a variável item.id_usuario, que provavelmente é um identificador único da ONG. 
+
+                                    <img src="${ipPython}/static/uploads/Livros/${item.id_usuario}.jpeg" class="img-logo" alt="Logo da ONG">
+
+                                    // ### Os '${item.algumacoisa}' são interpolações de string, ou seja, as coisas requeridas serão inseridas dinamicamente aqui.
+
+                                    <h3 class="titulo-ong descricao">${item.nome}</h3>
+                                    <p class="texto-ong categoria">${item.categoria}</p>
+                                </div>
+
+                                // ### 'window.open()' abaixo é usado para abrir a URL em uma nova aba ou janela do navegador. O link gerado contém parâmetros (id_usuario, nome, e_mail, etc.) que são passados como query strings na URL, permitindo que a próxima página (perfil da ONG) receba essas informações e as exiba.
+
+                                <button class="btn-slide" onclick="window.open('perfil_ong_p_doador.html?id_usuario=${item.id_usuario}&nome=${item.nome}&e_mail=${item.e_mail}&endereco=${item.endereco}&nome_resp=${item.nome_resp}&categoria=${item.categoria}&descricao_da_causa=${item.descricao_da_causa}&instagram=${item.instagram}&facebook=${item.facebook}&site_url=${item.site_url}&telefone=${item.telefone}&cnpj=${item.cnpj}&cep=${item.cep}&chave_pix=${item.chave_pix}&num_agencia=${item.num_agencia}&num_conta=${item.num_conta}&nome_banco=${item.nome_banco}')">Conheça</button>
+                            </div>
+                        </section>`;
+                    })
+                }
+            };
+
+            // O $.ajax() é um método do jQuery que faz uma requisição HTTP (geralmente para um servidor ou API) de forma assíncrona. Ou seja, você pode enviar ou receber dados sem precisar recarregar a página inteira. Nesse caso ele está fazendo a requisição para a API com as configurações definidas
+            $.ajax(settings).done(function (response) {
+                // Quando você usa '.done()', você está basicamente dizendo "Quando a requisição for bem-sucedida, execute essa função"
+                console.log(response); // Exibe o retorno da API no console para depuração
+            // // "response" é o objeto de resposta da requisição
+            });
+        })
+
+        // Evento de carregamento da página, após o conteúdo estar pronto
+        document.addEventListener("DOMContentLoaded", () => {
+            // Captura o campo de busca para fazer filtragem
+            const searchInput = document.getElementById("searchInput");
+
+            // Quando o usuário digita no campo de busca
+            searchInput.addEventListener("input", () => {
+                let query = searchInput.value.toLowerCase(); // Pega o valor digitado em minúsculo (através do 'toLowerCase')
+                let produtos = document.querySelectorAll(".prod"); // Seleciona todos os elementos de ONGs
+
+                // Para cada produto (ONG) verifica se o nome ou a categoria tem o texto da busca
+                produtos.forEach(produto => {
+                    let nome = produto.querySelector(".descricao")?.textContent.toLowerCase() || "";
+                    let categoria = produto.querySelector(".categoria")?.textContent.toLowerCase() || "";
+
+                    if (nome.includes(query) || categoria.includes(query)) {
+                        produto.style.display = "flex"; // Se encontrar, mostra a ONG
+                    } else {
+                        produto.style.display = "none"; // Caso contrário, esconde a ONG
+                    }
+                });
+
+                // Verifica se não há produtos visíveis após o filtro
+                let noProducts = document.querySelector(".no-products");
+
+                // se não tiver ONGs correspondentes
+                if (noProducts) {
+                    let produtosVisiveis = Array.from(produtos).some(produto => produto.style.display === "flex"); // 'Array.' passa para lista, O some() verifica se pelo menos um elemento do array atende a uma condição ( que é se o estilo display do produto for igual a "flex")
+
+                    // Se 'produtosVisiveis' for verdadeiro (ou seja, há ao menos uma ONG visível na página), a mensagem não será exibida (display: none).Se 'produtosVisiveis' for falso (ou seja, não há ONGs visíveis), a mensagem será exibida (display: block`).
+                    noProducts.style.display = produtosVisiveis ? "none" : "block"; // Exibe a mensagem de "nenhuma ONG encontrada"
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

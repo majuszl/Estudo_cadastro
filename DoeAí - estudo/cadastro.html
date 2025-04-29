@@ -35,12 +35,6 @@
     <header class="d-flex pt-3 align-items-center justify-content-center">
         <img class="logo1" src="assets/img/logo.png" alt="Logo da fundação 'Doe Aí'.">
 
-        <!-- Campo de busca por ONGs -->
-        <div class="group">
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="search-icon">...</svg>
-            <input id="query" class="input" type="search" placeholder="Busque por ONGs..." name="searchbar"/>
-        </div>
-
         <nav>
             <div>
                 <a href="landing-page.html" class="text-nav">PÁGINA INICIAL</a>
@@ -199,13 +193,13 @@
             tipo: dados.get("tipo")
         }
 
-        // Essa variávelransforma esse objeto em JSON
+        // Essa variável transforma esse objeto em JSON
         envia = JSON.stringify(envia)
 
         // Envia os dados via AJAX (AJAX é sempre uma requisição) para a API
         $.ajax({
             method: "POST",
-            url: ipPython + "/cadastro", // ATENÇÃO: é aqui que está sendo conectada a API com a página, o link é trazido da página JavaScript chamada 'api.js' e no final adicionamos a oparte do link quye corresponde especificamente a essa página
+            url: ipPython + "/cadastro", // ATENÇÃO: é aqui que está sendo conectada a API com a página, o link é trazido da página JavaScript chamada 'api.js' e no final adicionamos a parte do link que corresponde especificamente a essa página
             data: envia,
             contentType: "application/json",
             success: function(retorno){
